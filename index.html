@@ -29,6 +29,7 @@
         .icon { font-size: 48px; margin-bottom: 10px; display: inline-block; }
         h1 { font-size: 24px; color: #1a1a1a; margin-bottom: 8px; font-weight: 600; }
         .subtitle { font-size: 14px; color: #666; margin-bottom: 25px; }
+        
         .table-container {
             overflow-x: auto; margin-bottom: 25px;
             border-radius: 8px; border: 1px solid #eaeaea;
@@ -40,23 +41,42 @@
         tr:last-child td { border-bottom: none; }
         .price { color: #e11d48; font-weight: 600; }
         
-        /* 按钮通用样式 */
-        .btn {
+        /* 原生链接按钮 */
+        .btn-link {
             display: block; width: 100%; padding: 14px 0;
             border-radius: 8px; font-size: 16px; font-weight: 500;
             text-decoration: none; cursor: pointer;
-            transition: all 0.2s ease; border: none; margin-bottom: 12px;
+            transition: all 0.2s ease; margin-bottom: 12px;
+            text-align: center; border: none;
+        }
+        .btn-primary { 
+            background-color: #2563eb; 
+            color: #ffffff; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); 
+        }
+        
+        /* 复制区域样式 */
+        .copy-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
             text-align: center;
         }
-        .btn-primary { background-color: #2563eb; color: #ffffff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-secondary { background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-        .btn-secondary:active { background-color: #e2e8f0; }
-        .btn-secondary.copied { background-color: #10b981; color: white; border-color: #10b981; }
-        .footer-tips { margin-top: 20px; font-size: 12px; color: #94a3b8; }
-        
-        /* 允许长按复制 */
-        .wechat-text { user-select: all; -webkit-user-select: all; }
+        .copy-box p {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+        .wechat-text {
+            font-size: 20px;
+            color: #0f172a;
+            font-weight: bold;
+            user-select: all; 
+            -webkit-user-select: all; /* 允许一键全选 */
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -80,50 +100,18 @@
             </table>
         </div>
 
-        <!-- 用 JS 强制跳转，防止浏览器拦截 -->
-        <button onclick="goToSite()" class="btn btn-primary">
+        <!-- 使用标准的 <a> 标签，绝对不会被拦截 -->
+        <a href=" " class="btn-link btn-primary">
             🚀 点击前往注册 / 免费测试
-        </button>
+        </a >
 
-        <!-- 复制按钮，增加长按复制提示 -->
-        <button onclick="copyWeChat()" id="copyBtn" class="btn btn-secondary">
-            📋 复制客服微信：<span class="wechat-text">lzx24ad</span>
-        </button>
-
-        <div class="footer-tips">
-            * 如果点击没反应，请长按上方微信号手动复制
+        <!-- 放弃 JS，直接展示微信号让用户长按复制 -->
+        <div class="copy-box">
+            <p>👇 请长按下方字母复制微信号 👇</p >
+            <div class="wechat-text">lzx24ad</div>
         </div>
+
     </div>
 
-    <script>
-        // 强制跳转函数
-        function goToSite() {
-            var url = "https://sk5ip.cn/views/login.html#?promotionCode=FBAF6A055857A195E1AACA8E294E0760";
-            // 尝试新窗口打开，如果被拦截则当前窗口打开
-            var win = window.open(url, '_blank');
-            if (!win || win.closed || typeof win.closed == 'undefined') {
-                window.location.href = url;
-            }
-        }
-
-        // 兼容性最强的复制函数
-        function copyWeChat() {
-            var wechatId = "lzx24ad";
-            var btn = document.getElementById("copyBtn");
-            var originalText = btn.innerHTML;
-
-            // 方法1：现代 API
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(wechatId).then(function() {
-                    showSuccess(btn, originalText);
-                }).catch(function() {
-                    fallbackCopy(wechatId, btn, originalText);
-                });
-            } else {
-                // 方法2：老式兼容 API
-                fallbackCopy(wechatId, btn, originalText);
-            }
-        }
-
-        function fallbackCopy(text, btn, originalText) {
-            var textAr
+</body>
+</html>
